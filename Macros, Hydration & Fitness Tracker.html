@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Macros, Hydration & Fitness Tracker</title>
+<style>
+:root{--bg:#faf7f2;--ink:#33363a;--ln:#d6cfc3;--nut:#dde8dc;--wat:#d9e5ef;--sup:#e5ddef;--wo:#f7e1cf;--ref:#f7f0cd;--hd:#ece6dc;--ac:#5f8272;--m1:#f7f0cd;--m2:#d9e5ef;--m3:#dde8dc;--m4:#e5ddef;--m5:#f7e1cf;--m6:#e8e1d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.g{--bg:#fcf6f4;--nut:#e3e9dc;--wat:#f3dde2;--sup:#eadde8;--wo:#f5e6da;--ref:#f9f1e6;--hd:#f1e3e2;--ac:#a8657a;--m1:#f3dde2;--m2:#f9f1e6;--m3:#e3e9dc;--m4:#eadde8;--m5:#f5e6da;--m6:#efe2e4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{max-width:980px;margin:0 auto;padding:14px}
+h1,h2,h3{margin:0 0 8px;letter-spacing:.06em;text-transform:uppercase}h1{font-size:22px}h2{font-size:16px}
+body.g h1,body.g h2,body.g h3{font-family:Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0}
+.top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.ed button,.nav button,.btn{font:inherit;border:1px solid var(--ln);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.ed button.on,.nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:10px 0}
+.card{border-radius:14px;padding:14px;margin:14px 0;border:1px solid var(--ln);background:var(--hd);break-inside:avoid}
+.sc{overflow-x:auto}.row{display:grid;grid-template-columns:var(--gt,2.4fr 1.2fr repeat(4,.8fr));gap:6px;min-width:560px;margin-bottom:6px;align-items:center}
+.hd span{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}.tot{border-top:1px solid var(--ln);padding-top:6px}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;min-width:0;font:inherit;color:var(--ink);padding:6px 8px;border:1px solid var(--ln);border-radius:8px;background:rgba(255,255,255,.75)}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--ac);justify-self:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}.nu{background:rgba(255,255,255,.6);border-radius:12px;padding:10px}
+.nu b{display:block}.nu span{display:block;font-size:14px;margin:2px 0}.nu input{width:84px;display:inline-block;padding:3px 6px}
+.bar{height:12px;border-radius:99px;background:rgba(0,0,0,.08);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}.bar i.over{background:#c58d6b}
+.q{font-style:italic;font-size:17px;margin:6px 0 10px}.drops{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.drops label{width:34px;height:34px;border-radius:50% 50% 50% 8px;transform:rotate(-45deg);border:2px solid var(--ac);display:grid;place-items:center;cursor:pointer;background:rgba(255,255,255,.7)}
+.drops input{display:none}.drops label:has(input:checked){background:var(--ac)}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.fg label{font-size:13px;font-weight:600;display:block}
+.ck{display:flex;flex-wrap:wrap;gap:12px}.ck label{display:flex;gap:6px;align-items:center}.st{background:rgba(255,255,255,.6);border-radius:12px;padding:10px;text-align:center}.st b{display:block;font-size:22px}.st span{font-size:12px}
+.ch{position:relative;display:flex;gap:6px;height:180px;margin:8px 0}.col{flex:1;display:grid;grid-template-rows:18px 1fr 18px;text-align:center}.col small{font-size:11px}
+.cb{display:flex;align-items:flex-end}.cb i{width:100%;background:var(--ac);border-radius:4px 4px 0 0;opacity:.85}.gl{position:absolute;left:0;right:0;border-top:2px dashed var(--ink);opacity:.45}.gl span{font-size:10px;position:absolute;right:0;top:-14px}
+p.s{font-size:13px;opacity:.8;margin:4px 0}ol li{margin-bottom:4px}
+@media print{.nav,.ed,.noprint{display:none}body{background:#fff}}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const M=[['b','Breakfast'],['s1','Snack 1'],['l','Lunch'],['s2','Snack 2'],['d','Dinner'],['s3','Snack 3']];
+const DN=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const NU=[['cal','Calories','kcal'],['p','Protein','g'],['cb','Carbs','g'],['f','Fat','g']];
+const Q={s:['“You don’t have to feel ready. You just have to show up.”','“Champions are built on the days nobody is watching.”','“One tough day doesn’t end the season. Get back in the game.”','“The goal isn’t perfection. It’s showing up for the next rep.”','“You can’t win every quarter, but you can keep fighting until the final whistle.”','“Preparation is the quiet half of every win.”','“Rest is part of the playbook. Reset, then go again.”'],
+g:['“Pretty goals, strong habits, and a mindset that doesn’t fold.”','“You said you wanted this. Now show yourself you meant it.”','“Be the woman who keeps showing up for herself.”','“You can have a hard day without abandoning yourself.”','“Discipline is self-respect in action.”','“She’s becoming everything she promised herself she would be.”','“Caring for your body is how you thank it for carrying you.”']};
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const num=x=>parseFloat(x)||0,r1=x=>Math.round(x*10)/10;
+let S;try{S=JSON.parse(localStorage.getItem('trk2'))}catch(e){}
+S=S||{};S.g=S.g||{};S.sup=S.sup||Array.from({length:6},()=>({t:'Morning'}));S.d=S.d||{};S.wk=S.wk||{};S.ed=S.ed||'s';
+let view=(new Date().getDay()+6)%7,armed=false;
+const save=()=>{try{localStorage.setItem('trk2',JSON.stringify(S))}catch(e){}};
+const get=p=>p.split('.').reduce((o,k)=>o==null?o:o[k],S)??'';
+function set(p,v){const a=p.split('.');let o=S;for(let i=0;i<a.length-1;i++)o=o[a[i]]??={};o[a[a.length-1]]=v}
+const I=(p,t='text',x='')=>`<input data-p="${p}" type="${t}" ${t=='number'?'min="0" step="any" inputmode="decimal"':''} value="${esc(get(p))}" ${x}>`;
+const C=p=>`<input type="checkbox" data-p="${p}" ${get(p)?'checked':''}>`;
+const TA=p=>`<textarea data-p="${p}" rows="2">${esc(get(p))}</textarea>`;
+const SEL=(p,o)=>`<select data-p="${p}"><option value=""></option>${o.map(v=>`<option ${get(p)==v?'selected':''}>${v}</option>`).join('')}</select>`;
+const F=(l,h)=>`<div><label>${l}</label>${h}</div>`;
+function defDate(i){const d=new Date(),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7)+i),z=n=>String(n).padStart(2,'0');return `${m.getFullYear()}-${z(m.getMonth()+1)}-${z(m.getDate())}`}
+function dayT(i){const t={cal:0,p:0,cb:0,f:0,m:{}};M.forEach(([k])=>{const m={cal:0,p:0,cb:0,f:0};for(let r=0;r<5;r++)for(const x in m)m[x]+=num(get(`d.${i}.m.${k}.${r}.${x}`));t.m[k]=m;for(const x in m)t[x]+=m[x]});return t}
+function waterT(i){let c=0;for(let j=0;j<40;j++)if(get(`d.${i}.wd.${j}`))c++;return c*num(get('g.sv'))+num(get(`d.${i}.wx`))}
+function supT(i){let s=0,t=0;S.sup.forEach((x,j)=>{if((x.n||'').trim()){s++;if(get(`d.${i}.st.${j}`))t++}});return{s,t,a:s?t/s*100:0}}
+function day(i){
+const nd=num(get('g.sv'))&&num(get('g.w'))?Math.min(40,Math.ceil(num(get('g.w'))/num(get('g.sv')))):8;
+let h=`<div class="card"><h2>${DN[i]}</h2><div class="fg">${F('Date',`<input data-p="d.${i}.dt" type="date" value="${get(`d.${i}.dt`)||defDate(i)}">`)}${F('Today’s intention',I(`d.${i}.in`,'text','placeholder="My goal for today"'))}</div><div class="q">${Q[S.ed][i]}</div><label style="font-size:13px;font-weight:600">Main focus today</label><div class="ck">${['Nutrition','Hydration','Strength','Cardio','Recovery','Self-care'].map((x,j)=>`<label>${C(`d.${i}.fc.${j}`)}${x}</label>`).join('')}</div></div>`;
+h+=`<div class="card" style="background:var(--nut)"><h2>Macro &amp; calorie dashboard</h2><p class="s">Set your own daily goals (they carry across all days).</p><div class="grid">${NU.map(([k,l,u])=>`<div class="nu"><b>${l}</b><span>Eaten: <em id="c-${k}">0</em> ${u}</span><span>Goal: ${I('g.'+k,'number')} ${u}</span><span>Remaining: <em id="r-${k}">—</em></span><div class="bar"><i id="b-${k}"></i></div></div>`).join('')}</div></div>`;
+M.forEach(([k,l],n)=>{h+=`<div class="card" style="background:var(--m${n+1})"><h3>${l}</h3><div class="sc"><div class="row hd"><span>Food or Drink</span><span>Serving Size</span><span>Calories</span><span>Protein (g)</span><span>Carbs (g)</span><span>Fat (g)</span></div>`;
+for(let r=0;r<5;r++){const p=`d.${i}.m.${k}.${r}`;h+=`<div class="row">${I(p+'.n')}${I(p+'.s')}${['cal','p','cb','f'].map(x=>I(`${p}.${x}`,'number')).join('')}</div>`}
+h+=`<div class="row tot"><b>${l} total</b><span></span>${['cal','p','cb','f'].map(x=>`<b id="mt-${k}-${x}">0</b>`).join('')}</div></div>${F('Notes',I(`d.${i}.mn.${k}`))}</div>`});
+h+=`<div class="card" style="background:var(--hd)"><div class="sc"><div class="row tot" style="border:0"><b>DAILY TOTAL</b><span></span>${['cal','p','cb','f'].map(x=>`<b id="dt-${x}">0</b>`).join('')}</div></div></div>`;
+h+=`<div class="card" style="background:var(--wat)"><h2>Water intake</h2><div class="fg">${F('Daily goal (<span class="un"></span>)',I('g.w','number','data-rr'))}${F('Serving size (<span class="un"></span>)',I('g.sv','number','data-rr'))}${F('Units',SEL('g.u',['oz','ml']).replace('<option value=""></option>',''))}${F('Extra amount not in servings',I(`d.${i}.wx`,'number'))}</div>
+<div class="drops">${Array.from({length:nd},(_,j)=>`<label><input type="checkbox" data-p="d.${i}.wd.${j}" ${get(`d.${i}.wd.${j}`)?'checked':''}></label>`).join('')}</div>
+<p>Consumed: <b id="wc">0</b> <span class="un"></span> · Remaining: <b id="wr">—</b></p><div class="bar"><i id="wb"></i></div></div>`;
+h+=`<div class="card" style="background:var(--sup)"><h2>Supplements</h2><p class="s">Your list (name, dose, time) is shared across all days. Add only what’s right for you.</p><div class="sc"><div class="row hd" style="--gt:1.6fr 1.2fr 1fr .6fr 1.6fr"><span>Supplement</span><span>Serving or Dose</span><span>Scheduled Time</span><span>Taken?</span><span>Notes</span></div>`;
+S.sup.forEach((x,j)=>{h+=`<div class="row" style="--gt:1.6fr 1.2fr 1fr .6fr 1.6fr">${I(`sup.${j}.n`)}${I(`sup.${j}.d`)}<select data-p="sup.${j}.t">${['Morning','Afternoon','Evening'].map(t=>`<option ${x.t==t?'selected':''}>${t}</option>`).join('')}</select>${C(`d.${i}.st.${j}`)}${I(`d.${i}.sn.${j}`)}</div>`});
+h+=`</div><p>Scheduled: <b id="sc">0</b> · Taken: <b id="tk">0</b> · Adherence: <b id="ad">0%</b></p></div>`;
+h+=`<div class="card" style="background:var(--wo)"><h2>Workout &amp; activity</h2><div class="sc"><div class="row hd" style="--gt:2fr 1.6fr .6fr .6fr 1fr .9fr .7fr"><span>Exercise</span><span>Muscle Group / Activity</span><span>Sets</span><span>Reps</span><span>Weight / Resistance</span><span>Duration</span><span>Done?</span></div>`;
+for(let r=0;r<8;r++){const p=`d.${i}.ex.${r}`;h+=`<div class="row" style="--gt:2fr 1.6fr .6fr .6fr 1fr .9fr .7fr">${I(p+'.n')}${I(p+'.g')}${I(p+'.s','number')}${I(p+'.r','number')}${I(p+'.w')}${I(p+'.d')}${C(p+'.x')}</div>`}
+const a=`d.${i}.a.`;h+=`</div><h3 style="margin-top:12px">Activity summary</h3><div class="fg">${F('Workout type',I(a+'ty'))}${F('Workout duration (min)',I(a+'wd','number'))}${F('Cardio duration (min)',I(a+'cd','number'))}${F('Steps',I(a+'st','number'))}${F('Distance walked / run',I(a+'di','number'))}${F('Est. calories burned',I(a+'eb','number'))}</div><div class="ck" style="margin:10px 0"><label>${C(a+'done')}Workout completed</label><label>${C(a+'mob')}Stretching / mobility done</label><label>${C(a+'rest')}Rest / recovery day</label></div>${F('Recovery notes',I(a+'rn'))}<p class="s">Estimated burn is for reference only. It is never added to your food goals.</p></div>`;
+const r=`d.${i}.r.`;h+=`<div class="card" style="background:var(--ref)"><h2>Daily reflection</h2><div class="fg">${F('One thing I did well',TA(r+'w'))}${F('One challenge and how I handled it',TA(r+'c'))}${F('One thing I’m proud of',TA(r+'p'))}</div><div class="fg" style="margin-top:10px">${F('Energy (1–5)',SEL(r+'e',[1,2,3,4,5]))}${F('Hunger (1–5)',SEL(r+'h',[1,2,3,4,5]))}${F('Mood',I(r+'m'))}${F('Sleep (hours)',I(r+'sl','number'))}${F('Small goal for tomorrow',I(r+'g'))}</div><div class="ck" style="margin-top:10px">${['Nutrition','Hydration','Supplements','Movement','Self-care'].map((x,j)=>`<label>${C(`d.${i}.cl.${j}`)}${x}</label>`).join('')}</div></div>`;
+return h}
+function ch(v,goal){const mx=Math.max(goal||0,...v,1);return `<div class="ch">${goal?`<div class="gl" style="bottom:calc((100% - 36px)*${goal/mx} + 18px)"><span>goal</span></div>`:''}${v.map((x,i)=>`<div class="col"><small>${r1(x)}</small><div class="cb"><i style="height:${x/mx*100}%"></i></div><small>${DN[i].slice(0,3)}</small></div>`).join('')}</div>`}
+const stat=(l,v)=>`<div class="st"><b>${v}</b><span>${l}</span></div>`;
+function week(){const gc=num(get('g.cal')),gp=num(get('g.p')),gw=num(get('g.w'));
+const T=DN.map((_,i)=>dayT(i)),W=DN.map((_,i)=>waterT(i)),U=DN.map((_,i)=>supT(i));
+const sum=f=>T.reduce((s,t)=>s+t[f],0),lg=T.filter(t=>t.cal>0).length||0,av=f=>lg?r1(sum(f)/lg):0;
+const A=k=>DN.map((_,i)=>num(get(`d.${i}.a.${k}`))),as=k=>r1(A(k).reduce((a,b)=>a+b,0));
+const cnt=k=>DN.filter((_,i)=>get(`d.${i}.a.${k}`)).length;
+const act=DN.filter((_,i)=>get(`d.${i}.a.done`)||A('wd')[i]>0||A('cd')[i]>0||A('st')[i]>0).length;
+const cm=T.filter(t=>gc&&t.cal>0&&Math.abs(t.cal-gc)<=gc*.1).length,pm=T.filter(t=>gp&&t.p>=gp).length,wm=W.filter(w=>gw&&w>=gw).length;
+const ss=U.reduce((a,u)=>a+u.s,0),st=U.reduce((a,u)=>a+u.t,0),tw=W.reduce((a,b)=>a+b,0),u=get('g.u')||'oz';
+const wk='wk.';
+let h=`<div class="card"><h2>Weekly progress &amp; review</h2><p class="s">Averages use days with food logged. “Calorie goal met” = within 10% of goal; “protein goal met” = at or above goal. Progress is more than the scale.</p></div>`;
+h+=`<div class="card" style="background:var(--nut)"><h3>Nutrition</h3><div class="grid">${stat('Total calories',r1(sum('cal')))}${stat('Avg daily calories',av('cal'))}${stat('Calorie goal',gc||'—')}${stat('Avg protein (g)',av('p'))}${stat('Avg carbs (g)',av('cb'))}${stat('Avg fat (g)',av('f'))}${stat('Total protein (g)',r1(sum('p')))}${stat('Total carbs (g)',r1(sum('cb')))}${stat('Total fat (g)',r1(sum('f')))}${stat('Calorie goal days',cm)}${stat('Protein goal days',pm)}</div><p class="s" style="margin-top:10px">Calories vs goal (dashed)</p>${ch(T.map(t=>t.cal),gc)}<p class="s">Protein (g) vs goal</p>${ch(T.map(t=>t.p),gp)}</div>`;
+h+=`<div class="card" style="background:var(--wat)"><h3>Hydration</h3><div class="grid">${stat('Total ('+u+')',r1(tw))}${stat('Avg daily',r1(tw/7))}${stat('Goal completion',gw?r1(tw/(gw*7)*100)+'%':'—')}${stat('Days goal met',wm)}</div>${ch(W,gw)}</div>`;
+h+=`<div class="card" style="background:var(--sup)"><h3>Supplement consistency</h3><div class="grid">${stat('Scheduled',ss)}${stat('Taken',st)}${stat('Weekly adherence',ss?r1(st/ss*100)+'%':'—')}</div><p class="s">Daily adherence (%)</p>${ch(U.map(x=>x.a),100)}</div>`;
+h+=`<div class="card" style="background:var(--wo)"><h3>Workouts &amp; activity</h3><div class="grid">${stat('Workouts completed',cnt('done'))}${stat('Workout minutes',as('wd'))}${stat('Cardio minutes',as('cd'))}${stat('Steps',as('st'))}${stat('Distance',as('di'))}${stat('Active days',act)}${stat('Rest / recovery days',cnt('rest'))}</div><p class="s" style="margin-top:10px">Workout + cardio minutes</p>${ch(A('wd').map((x,i)=>x+A('cd')[i]),0)}</div>`;
+h+=`<div class="card" style="background:var(--ref)"><h3>Goal review</h3><div class="fg">${F('Starting weight (optional)',I(wk+'ws','number'))}${F('Ending weight (optional)',I(wk+'we','number'))}${F('Weekly change',`<b id="wchg">—</b>`)}${F('Waist / other measurements',I(wk+'wa'))}</div><div class="fg" style="margin-top:10px">${F('Progress toward my longer-term goal',TA(wk+'lt'))}${F('Biggest win',TA(wk+'win'))}${F('Biggest challenge',TA(wk+'ch'))}${F('What I learned',TA(wk+'le'))}${F('What to improve next week',TA(wk+'im'))}${F('Goal 1 for next week',I(wk+'g1'))}${F('Goal 2',I(wk+'g2'))}${F('Goal 3',I(wk+'g3'))}</div><p class="q" style="margin-top:12px">${S.ed=='s'?'Great teams are built on consistency. ':'Look at her, still showing up. '}You logged food on ${lg} of 7 days, hit your water goal ${wm} time${wm==1?'':'s'}, and showed up for ${act} active day${act==1?'':'s'}. That effort counts, whatever the scale says.</p></div>`;return h}
+function guide(){return `<div class="card"><h2>How to use</h2><ol><li>Open any day and enter your own calorie, protein, carb and fat goals in the dashboard (they apply to every day).</li><li>Log foods in the meal tables. Meal totals feed the daily dashboard, and daily totals feed the Week page.</li><li>Set your water goal, serving size and units. Tap a drop for each serving, or add extra amounts.</li><li>Enter your supplements once; the list is reused every day. Tick each one when taken.</li><li>Log workouts, activity and your reflection. Blank or incomplete days are fine.</li><li>Open Week for totals, averages and charts. Weight and measurements stay blank unless you enter them.</li></ol><p class="s">Entries save automatically in this browser on this device. Switching edition changes only the theme and quotes; your data stays. Use your browser’s print option for a paper copy.</p><button class="btn" id="rs">Start a new week</button> <span class="s" id="rm">Clears all daily entries and weekly review; keeps goals and supplement list.</span></div>`}
+function render(){document.body.className=S.ed=='g'?'g':'';
+const tabs=[...DN.map(d=>d.slice(0,3)),'Week','Guide'];
+document.getElementById('app').innerHTML=`<div class="top"><h1>${S.ed=='s'?'🏆 Training Camp Tracker':'🌸 Becoming That Girl'}</h1><div class="ed"><button data-e="s" class="${S.ed=='s'?'on':''}">Sports Edition</button> <button data-e="g" class="${S.ed=='g'?'on':''}">Just for the Girls</button></div></div><div class="nav">${tabs.map((t,i)=>`<button data-v="${i}" class="${view==i?'on':''}">${t}</button>`).join('')}</div>${view<7?day(view):view==7?week():guide()}`;calc()}
+function T(id,v){const e=document.getElementById(id);if(e)e.textContent=v}
+function B(id,p){const e=document.getElementById(id);if(e){e.style.width=Math.min(100,p)+'%';e.classList.toggle('over',p>100)}}
+function calc(){document.querySelectorAll('.un').forEach(e=>e.textContent=get('g.u')||'oz');
+if(view<7){const i=view,t=dayT(i);NU.forEach(([k])=>{const g=num(get('g.'+k));T('c-'+k,r1(t[k]));T('r-'+k,g?r1(g-t[k]):'—');B('b-'+k,g?t[k]/g*100:0);T('dt-'+k,r1(t[k]))});
+M.forEach(([m])=>['cal','p','cb','f'].forEach(x=>T(`mt-${m}-${x}`,r1(t.m[m][x]))));
+const w=waterT(i),g=num(get('g.w'));T('wc',r1(w));T('wr',g?r1(Math.max(0,g-w)):'—');B('wb',g?w/g*100:0);
+const s=supT(i);T('sc',s.s);T('tk',s.t);T('ad',r1(s.a)+'%')}
+else if(view==7){const a=get('wk.ws'),b=get('wk.we');T('wchg',a!==''&&b!==''?r1(num(b)-num(a)):'—')}}
+document.addEventListener('input',e=>{const p=e.target.dataset.p;if(!p)return;set(p,e.target.type=='checkbox'?e.target.checked:e.target.value);save();calc()});
+document.addEventListener('change',e=>{if(e.target.dataset.rr!==undefined)render()});
+document.addEventListener('click',e=>{const t=e.target;
+if(t.dataset.v!==undefined){view=+t.dataset.v;armed=false;render();scrollTo(0,0)}
+else if(t.dataset.e){S.ed=t.dataset.e;save();render()}
+else if(t.id=='rs'){if(!armed){armed=true;t.textContent='Tap again to confirm';T('rm','This cannot be undone.')}else{S.d={};S.wk={};armed=false;save();view=0;render()}}});
+render();
+</script></body></html>
